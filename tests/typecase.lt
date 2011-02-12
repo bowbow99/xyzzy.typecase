@@ -18,7 +18,7 @@
 
 (define-test typecase
   (dolist (x '(("foo" . :string)
-               ('foo  . :symbol)
+               (foo   . :symbol)
                (:foo  . :symbol)
                (123   . :fixnum)
                (#\c   . :other)
