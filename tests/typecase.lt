@@ -52,8 +52,11 @@
           (otherwise :other))
       (car x)
       (cdr x)))
+  ;; If there's no matching clause
   (assert-eql nil (typecase 33))
-  (assert-eql nil (typecase 33 (string :string) (symbol :symbol))))
+  (assert-eql nil (typecase 33 (string :string) (symbol :symbol)))
+  ;; If there's no forms in matching clause
+  (assert-eql nil (typecase 33 (fixnum))))
 
 (define-test etypecase
   (macrolet ((do-etypecase (x)
@@ -66,7 +69,9 @@
       (assert-true (do-etypecase x)))
     (dolist (x (list '(t . nil) #(a b c) (make-hash-table)))
       (assert-error 'type-error
-          (do-etypecase x)))))
+          (do-etypecase x)))
+    ;; If there's no forms in matching clause
+    (assert-eql nil (etypecase 33 (fixnum)))))
 
 (define-test ctypecase
   (macrolet ((do-ctypecase (x)
@@ -91,7 +96,9 @@
                   (invoke-restart 'store-value "foo"))))
             (do-ctypecase x)))
       ;; value of `x` must be replaced by `store-value` restart
-      (assert-equal "foo" x))))
+      (assert-equal "foo" x))
+    ;; If there's no forms in matching clause
+    (assert-eql nil (ctypecase 33 (fixnum)))))
 
 
 ;;; tests/typecase.lt ends here.
