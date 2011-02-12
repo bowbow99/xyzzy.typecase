@@ -1,6 +1,6 @@
 これは何
 ========
-Common Lisp の `typecase` やらなんやら（作り始めた）。
+Common Lisp の `typecase` やらなんやら（とりあえず作った）。
 
 参考リンク
 ----------
@@ -34,7 +34,8 @@ NetInstaller から
 
 注意点、既知の問題など
 ======================
-- 何も実装されてない
+- condition-restart の `ed:read-value` を使ってるが、`ed:read-value` は開発版
+  にしか実装されてないので、condition-restart を先に更新する必要あり
 
 バグ報告、質問、要望などは [GitHubIssues] か [@bowbow99] あたりへお願いします。
 
