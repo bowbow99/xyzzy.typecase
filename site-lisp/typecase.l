@@ -1,4 +1,4 @@
-;;; -*- mode: lisp; -*-
+;;; -*- mode: lisp; package: typecase -*-
 ;;;
 ;;; typecase.l --- DESCRIPTION
 ;;;
@@ -10,5 +10,28 @@
 ;;; ChangeLog:  (see ChangeLog)
 
 ;;; Code:
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (require "typespec+")
+  (require "condition-restart"))
+
+(defpackage :typecase
+  (:use :lisp :typespec+))
+
+(in-package :typecase)
+
+(export (mapcar (lambda (name) (intern (string name) :lisp))
+          '(#:typecase
+            #:etypecase
+            #:ctypecase
+            #:otherwise))
+        :lisp)
+
+#+xyzzy
+(mapc (lambda (name)
+        (setf (get name 'ed:lisp-indent-hook) 1))
+      '(lisp:typecase
+        lisp:etypecase
+        lisp:ctypecase))
 
 ;;; typecase.l ends here.
