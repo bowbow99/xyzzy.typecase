@@ -171,7 +171,7 @@ error を投げますが、store-value 再起動から KEY-PLACE の値を修正
 </description>
 <seealso>typep</seealso>
 <seealso>typecase</seealso>
-<seealso>ctypecase</seealso>
+<seealso>etypecase</seealso>
 <seealso>restart-case</seealso>
 <link>[CLHS: Macro TYPECASE, CTYPECASE, ETYPECASE] http://www.lispworks.com/documentation/HyperSpec/Body/m_tpcase.htm</link>
 <section>制御構造</section>
