@@ -51,7 +51,9 @@
           (callable  :callable)
           (otherwise :other))
       (car x)
-      (cdr x))))
+      (cdr x)))
+  (assert-eql nil (typecase 33))
+  (assert-eql nil (typecase 33 (string :string) (symbol :symbol))))
 
 (define-test etypecase
   (macrolet ((do-etypecase (x)
