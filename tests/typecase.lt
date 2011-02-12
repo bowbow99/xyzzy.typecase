@@ -53,4 +53,17 @@
       (car x)
       (cdr x))))
 
+(define-test etypecase
+  (macrolet ((do-etypecase (x)
+               `(etypecase ,x
+                  (callable :callable)
+                  (symbol :symbol)
+                  (string :string)
+                  (fixnum :fixnum))))
+    (dolist (x (list #'car 'car 'foo "foo" 33))
+      (assert-true (do-etypecase x)))
+    (dolist (x (list '(t . nil) #(a b c) (make-hash-table)))
+      (assert-error 'type-error
+          (do-etypecase x)))))
+
 ;;; tests/typecase.lt ends here.
