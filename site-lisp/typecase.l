@@ -51,4 +51,14 @@
                            (rec (cdr clauses))))))
           (rec clauses)))))
 
+;;; Macro `etypecase`
+(defmacro lisp:etypecase (keyform &rest clauses)
+  `(let ((#1=#:key-object ,keyform))
+     (cond ,@(mapcar (lambda (clause)
+                       `(,(optimize-type-check '#1# (car clause))
+                         ,@(cdr clause)))
+               clauses)
+           (t (error 'type-error :datum #1#
+                     :expected-type '(or ,@(mapcar #'car clauses)))))))
+
 ;;; typecase.l ends here.
