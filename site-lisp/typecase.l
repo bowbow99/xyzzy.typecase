@@ -44,7 +44,7 @@
                                `((t ,@(cdar clauses))))
                               (t
                                `((,(optimize-type-check '#1# (caar clauses))
-                                  ,@(cdar clauses))
+                                  (progn,@(cdar clauses)))
                                  ,@(expand (cdr clauses)))))))
                (expand clauses)))))
 
@@ -53,7 +53,7 @@
   `(let ((#1=#:key-object ,keyform))
      (cond ,@(mapcar (lambda (clause)
                        `(,(optimize-type-check '#1# (car clause))
-                         ,@(cdr clause)))
+                         (progn ,@(cdr clause))))
                clauses)
            (t (error 'type-error :datum #1#
                      :expected-type '(or ,@(mapcar #'car clauses)))))))
