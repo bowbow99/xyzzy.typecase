@@ -66,4 +66,30 @@
       (assert-error 'type-error
           (do-etypecase x)))))
 
+(define-test ctypecase
+  (macrolet ((do-ctypecase (x)
+               `(ctypecase ,x
+                  (callable :callable)
+                  (symbol :symbol)
+                  (string :string)
+                  (fixnum :fixnum))))
+    (dolist (x (list #'car 'car 'foo "foo" 33))
+      (assert-true (do-ctypecase x)))
+    ;; signal `type-error` as `etypecase`
+    (dolist (x (list '(t . nil) #(a b c) (make-hash-table)))
+      (assert-error 'type-error
+          (do-ctypecase x)))
+    ;; Able to correct error by `store-value` restart
+    (dolist (x (list '(t . nil) #(a b c) (make-hash-table)))
+      (assert-eql :string
+          (handler-bind
+              ((type-error
+                (lambda (e)
+                  (assert-true (find-restart 'store-value e))
+                  (invoke-restart 'store-value "foo"))))
+            (do-ctypecase x)))
+      ;; value of `x` must be replaced by `store-value` restart
+      (assert-equal "foo" x))))
+
+
 ;;; tests/typecase.lt ends here.
