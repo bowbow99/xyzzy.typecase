@@ -60,4 +60,24 @@
            (t (error 'type-error :datum #1#
                      :expected-type '(or ,@(mapcar #'car clauses)))))))
 
+;;; Macro `ctypecase`
+(defmacro lisp:ctypecase (place &rest clauses)
+  `(prog (#1=#:key-object)
+     #2=#:ctypecase-root
+     (setf #1# ,place)
+     (cond ,@(mapcar (lambda (clause)
+                       `(,(optimize-type-check '#1# (car clause))
+                         (return (progn ,@(cdr clause)))))
+               clauses)
+           (t (restart-case
+                  (error 'type-error :datum #1#
+                         :expected-type '(or ,@(mapcar #'car clauses)))
+                (store-value (new)
+                  :report ,(format nil "`~S' ÇÃílÇïœçXÇ∑ÇÈ" place)
+                  :interactive
+                  (lambda ()
+                    (list (ed:read-value (format nil "`~S' ÇÃíl: " ',place))))
+                  (setf ,place new)
+                  (go #2#)))))))
+
 ;;; typecase.l ends here.
