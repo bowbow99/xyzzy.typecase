@@ -28,6 +28,14 @@
           (string :string)
           (fixnum :fixnum)
           (symbol :symbol)
-          (t      :other)))))
+          (t      :other))
+      (car x) (cdr x))
+    (assert-eql (cdr x)
+        (typecase (car x)
+          (string :string)
+          (fixnum :fixnum)
+          (symbol :symbol)
+          (otherwise :other))
+      (car x) (cdr x))))
 
 ;;; tests/typecase.lt ends here.
