@@ -34,4 +34,21 @@
         lisp:etypecase
         lisp:ctypecase))
 
+;;; Macro `typecase`
+(defmacro lisp:typecase (keyform &rest clauses)
+  `(let ((#1=#:key-object ,keyform))
+     (cond
+      ,@(labels ((expand-1 (clause)
+                   `(,(optimize-type-check '#1# (car clause))
+                     ,@(cdr clause)))
+                 (otherwise-clause-p (clause)
+                   (member (car clause) '(t otherwise)))
+                 (rec (clauses)
+                   (if (and (null (cdr clauses))
+                            (otherwise-clause-p (car clauses)))
+                     `((t ,@(cdar clauses)))
+                     (cons (expand-1 (car clauses))
+                           (rec (cdr clauses))))))
+          (rec clauses)))))
+
 ;;; typecase.l ends here.
