@@ -1,0 +1,33 @@
+;;; -*- mode: lisp; package: test.typecase -*-
+;;;
+;;; tests/typecase.lt
+;;;
+
+;;; Code:
+
+(require "typecase")
+(require "lisp-unit")
+
+(defpackage :test.typecase
+  (:use :lisp :lisp-unit))
+
+(in-package :test.typecase)
+
+(remove-all-tests :test.typecase)
+
+
+(define-test typecase
+  (dolist (x '(("foo" . :string)
+               ('foo  . :symbol)
+               (:foo  . :symbol)
+               (123   . :fixnum)
+               (#\c   . :other)
+               ((t nil) . :other)))
+    (assert-eql (cdr x)
+        (typecase (car x)
+          (string :string)
+          (fixnum :fixnum)
+          (symbol :symbol)
+          (t      :other)))))
+
+;;; tests/typecase.lt ends here.
